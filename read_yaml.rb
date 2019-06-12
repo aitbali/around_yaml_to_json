@@ -1,25 +1,24 @@
 require'yaml'
 
-puts "coucou"
-#=> 
 def parse_yml_from_dir(dir_name)
-    Dir[dir_name].each_with_object([]) {|yml_path, acc |  acc << YAML.load_file(yml_path)}
+  Dir[dir_name].each_with_object([]) {|yml_path, acc |  acc << YAML.load_file(yml_path)}
 end
 
 
 def language_from_translation_hash(translation_hash)
-    translation_hash.keys.first
+  translation_hash.keys.first
 end
 
-puts parse_yml_from_dir("test_set/*.yml")
+def get_keys_from_hash(translation_hash)
+  arr = []
+  translation_hash.each do |key, value|
+   arr << key 
+   arr.concat(get_keys_from_hash(value)).flatten.compact if value.is_a? Hash
+  end.flatten
+  arr
+end
 
-#array_path = Dir["*.yml"]
-#puts array_path
-#arr =[]
+ary =  parse_yml_from_dir("test_set/*.yml")
 
-#ficen = YAML.load_file()
-#puts ficen.class
+p get_keys_from_hash(ary.first)
 
-
-#ficen.each_with_object({}) { |k, v| arr <<  YAML.load_file() {k => v } }
-#puts arr
